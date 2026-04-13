@@ -1,0 +1,179 @@
+# teamo
+my visual novel
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Special+Elite&family=Crimson+Text&display=swap" rel="stylesheet">
+
+<style>
+html, body { height: 100%; margin: 0; overflow: hidden; }
+* { box-sizing: border-box; }
+
+body {
+  background:#1a0a10;
+  color:#f0d4e0;
+  font-family:'Crimson Text', serif;
+}
+
+/* SCREENS */
+.screen {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  transition:0.8s;
+}
+.screen.active {
+  opacity:1;
+  pointer-events:all;
+}
+
+/* BUTTON */
+button {
+  background:#8b2252;
+  color:white;
+  padding:10px 25px;
+  border:none;
+  cursor:pointer;
+}
+
+/* INPUT */
+input {
+  background:transparent;
+  border:none;
+  border-bottom:2px solid pink;
+  color:white;
+  text-align:center;
+}
+
+/* EFFECTS */
+#glitch {
+  position:fixed;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+.tooMuch {
+  position:fixed;
+  font-size:60px;
+  opacity:0;
+  color:#ff6b9d22;
+  transition:0.3s;
+}
+</style>
+</head>
+
+<body>
+
+<div id="screenTitle" class="screen active">
+<h1 id="title">my love</h1>
+<button onclick="start()">comenzar</button>
+</div>
+
+<div id="screenName" class="screen">
+<p>¿Cuál es tu nombre?</p>
+<input id="name">
+<button onclick="check()">verificar</button>
+<p id="error"></p>
+</div>
+
+<div id="screenStory" class="screen">
+<p id="text"></p>
+<button onclick="next()">continuar</button>
+</div>
+
+<div id="screenEnd" class="screen">
+<p>Te amo… mi luz 🌹</p>
+<button onclick="restart()">volver</button>
+</div>
+
+<script>
+
+let screen = "screenTitle";
+let attempts = 0;
+let nameOK = ["mai","maikol"];
+
+let story = [
+"Había una vez una chica… estaba sola.",
+"Hasta que en la oscuridad apareció una luz.",
+"Era perfecta… y se acercó.",
+"Tuve miedo… pero avancé.",
+"Ha pasado un año…",
+"Te amo… mi luz"
+];
+
+let i = 0;
+
+function change(s){
+document.getElementById(screen).classList.remove("active");
+document.getElementById(s).classList.add("active");
+screen = s;
+}
+
+function start(){
+document.getElementById("title").innerText="i love you... darling";
+change("screenName");
+}
+
+function check(){
+let n = document.getElementById("name").value.toLowerCase();
+
+if(nameOK.includes(n)){
+change("screenStory");
+show();
+}else{
+attempts++;
+document.getElementById("error").innerText="tú no eres el amor de mi vida";
+
+if(attempts>=4){
+alert("esto no es para ti");
+location.reload();
+}
+}
+}
+
+function show(){
+document.getElementById("text").innerText=story[i];
+}
+
+function next(){
+i++;
+if(i<story.length){
+show();
+}else{
+change("screenEnd");
+}
+}
+
+function restart(){
+location.reload();
+}
+
+document.addEventListener("click",()=>{
+if(Math.random()<0.3){
+let t=document.createElement("div");
+t.className="tooMuch";
+t.innerText="too much";
+t.style.left=Math.random()*80+"%";
+t.style.top=Math.random()*80+"%";
+document.body.appendChild(t);
+setTimeout(()=>t.style.opacity=1,10);
+setTimeout(()=>t.remove(),1000);
+}
+});
+
+</script>
+
+</body>
+</html>

@@ -1,2 +1,0 @@
-# teamo
-my visual novel
